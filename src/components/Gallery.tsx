@@ -11,7 +11,7 @@ export function Gallery({ artworks }: GalleryProps) {
         <div
           key={artwork.id}
           // rounded + shadow gives cards some depth; hover adds scale/stronger shadow
-          className="border border-gray-300 rounded bg-white overflow-hidden shadow-sm hover:shadow-lg transform hover:scale-105 transition"
+          className="border border-gray-300 rounded bg-white overflow-hidden shadow-sm hover:shadow-lg transform hover:scale-105 transition-transform duration-200 ease-in-out"
         >
           <img
             src={artwork.image}
