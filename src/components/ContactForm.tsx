@@ -6,11 +6,12 @@ export function ContactForm() {
     email: "",
     message: "",
   });
-  // track submission to show temporary confirmation text
+
+  // V2: submission state for showing temporary confirmation message
   const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -29,13 +30,17 @@ export function ContactForm() {
 
   return (
     // white background + padding/rounded/shadow to give breathing room and lightness
-    <form onSubmit={handleSubmit} className="max-w-md space-y-4 bg-white p-6 rounded shadow-md">
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-md space-y-4 bg-white p-6 rounded shadow-md"
+    >
       {submitted && (
         // temporary success message shown after submission
         <p className="text-green-600 text-sm">
           Thank you! Your message has been sent.
         </p>
       )}
+
       <div>
         <label htmlFor="name" className="block text-sm font-medium">
           Name
