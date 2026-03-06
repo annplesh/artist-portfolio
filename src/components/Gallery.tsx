@@ -8,7 +8,11 @@ export function Gallery({ artworks }: GalleryProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {artworks.map((artwork) => (
-        <div key={artwork.id} className="border border-gray-300">
+        <div
+          key={artwork.id}
+          // rounded + shadow gives cards some depth; hover adds scale/stronger shadow
+          className="border border-gray-300 rounded bg-white overflow-hidden shadow-sm hover:shadow-lg transform hover:scale-105 transition"
+        >
           <img
             src={artwork.image}
             alt={artwork.title}
