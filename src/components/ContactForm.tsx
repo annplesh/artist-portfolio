@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 export function ContactForm() {
   const [formData, setFormData] = useState({
@@ -15,11 +15,11 @@ export function ContactForm() {
     message: "",
   });
 
-  // Простая email-проверка
+  // Валидация email вынесена отдельно
   const emailRegex = /^[\w-.]+@[\w-]+\.[a-zA-Z]{2,}$/;
 
-  // Валидация для каждого поля
-  const validate = (name: string, value: string) => {
+  // Проверка значения поля
+  function validate(name: string, value: string) {
     switch (name) {
       case "name":
         return value.trim() ? "" : "Name is required.";
@@ -32,31 +32,26 @@ export function ContactForm() {
       default:
         return "";
     }
-  };
+  }
 
-  // Валидация на лету при каждом вводе
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  // Обработка поля: обновляет значение и ошибку
+  function handleField(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    setErrors((prev) => ({
-      ...prev,
-      [name]: validate(name, value),
-    }));
-  };
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: validate(name, value) }));
+  }
 
-  // Форма валидна, если нет ошибок и все поля заполнены
-  const isValid =
-    Object.values(errors).every((err) => err === "") &&
-    Object.values(formData).every((val) => val.trim());
+  // Оптимизированная проверка валидности формы
+  const isValid = useMemo(() => {
+    return (
+      Object.values(errors).every((err) => err === "") &&
+      Object.values(formData).every((val) => val.trim())
+    );
+  }, [errors, formData]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Отправка формы: финальная проверка и очистка
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // Проверяем все поля перед отправкой
     const newErrors = {
       name: validate("name", formData.name),
       email: validate("email", formData.email),
@@ -68,7 +63,7 @@ export function ContactForm() {
     setFormData({ name: "", email: "", message: "" });
     setSubmitted(true);
     setTimeout(() => setSubmitted(false), 5000);
-  };
+  }
 
   return (
     // white background + padding/rounded/shadow to give breathing room and lightness
@@ -92,7 +87,7 @@ export function ContactForm() {
           id="name"
           name="name"
           value={formData.name}
-          onChange={handleChange}
+          onChange={handleField}
           className={`w-full border px-3 py-2 ${errors.name ? "border-red-500" : "border-gray-300"}`}
         />
         {errors.name && (
@@ -109,7 +104,7 @@ export function ContactForm() {
           id="email"
           name="email"
           value={formData.email}
-          onChange={handleChange}
+          onChange={handleField}
           className={`w-full border px-3 py-2 ${errors.email ? "border-red-500" : "border-gray-300"}`}
         />
         {errors.email && (
@@ -125,7 +120,7 @@ export function ContactForm() {
           id="message"
           name="message"
           value={formData.message}
-          onChange={handleChange}
+          onChange={handleField}
           rows={4}
           className={`w-full border px-3 py-2 ${errors.message ? "border-red-500" : "border-gray-300"}`}
         />
