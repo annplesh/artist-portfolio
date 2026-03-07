@@ -25,7 +25,7 @@ export function ContactForm() {
     console.log("Form submitted:", formData);
     setFormData({ name: "", email: "", message: "" });
     setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+    setTimeout(() => setSubmitted(false), 5000);
   };
 
   return (
@@ -36,7 +36,7 @@ export function ContactForm() {
     >
       {submitted && (
         // temporary success message shown after submission
-        <p className="text-green-600 text-sm">
+        <p className="text-green-600 text-sm transition-opacity duration-700">
           Thank you! Your message has been sent.
         </p>
       )}
