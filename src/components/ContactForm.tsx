@@ -23,10 +23,12 @@ export function ContactForm() {
     switch (name) {
       case "name":
         return value.trim() ? "" : "Name is required.";
-      case "email":
-        if (!value.trim()) return "Email is required.";
-        if (!emailRegex.test(value)) return "Enter a valid email.";
+      case "email": {
+        const trimmed = value.trim();
+        if (!trimmed) return "Email is required.";
+        if (!emailRegex.test(trimmed)) return "Enter a valid email.";
         return "";
+      }
       case "message":
         return value.trim() ? "" : "Message is required.";
       default:
@@ -35,7 +37,10 @@ export function ContactForm() {
   }
 
   // Обработка поля: обновляет значение и ошибку
-  function handleField(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+  function handleField(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) {
+    setSubmitted(false);
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: validate(name, value) }));
@@ -43,11 +48,8 @@ export function ContactForm() {
 
   // Оптимизированная проверка валидности формы
   const isValid = useMemo(() => {
-    return (
-      Object.values(errors).every((err) => err === "") &&
-      Object.values(formData).every((val) => val.trim())
-    );
-  }, [errors, formData]);
+    return Object.values(errors).every((err) => err === "");
+  }, [errors]);
 
   // Отправка формы: финальная проверка и очистка
   function handleSubmit(e: React.FormEvent) {
