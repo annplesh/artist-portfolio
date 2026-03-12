@@ -104,3 +104,11 @@ Task: replace `object-cover` with `object-contain`.
 ## 9. Escalation Rule
 
 If a task is unclear or allows multiple interpretations, the assistant must ask a clarifying question before making any changes.
+
+## 10. React Style (Modern + Best Practices)
+
+- Use modern React: import hooks directly (useState, useEffect, etc.).
+- Do NOT use React.useState or import React unless required.
+- Functional components only.
+- Keep state minimal; no refactoring unless task requires it.
+- Follow minimal-change rule even when applying best practices.
